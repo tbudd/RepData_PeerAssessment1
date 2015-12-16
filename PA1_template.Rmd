@@ -7,19 +7,95 @@ output:
 
 
 ## Loading and preprocessing the data
+The activity data were first extracted from the activity zip archive included in the RepData_PeerAssessment1 fork from 
+https://github.com/rdpeng/RepData_PeerAssessment1
 
+The activity.csv file is assumed to exist in the current directory.
 
-
+```{r echo=TRUE}
+library(lattice) ## We will need this for plotting
+active <- read.csv("activity.csv",stringsAsFactors = FALSE) ## read in the complete dataset from csv
+active$date<-as.Date(active$date,"%Y-%m-%d") ## Convert strings to dates
+active2<-active[complete.cases(active),] ## remove NAs
+```
 ## What is mean total number of steps taken per day?
+Aggregate and plot a histogram of the total number of steps taken per day.
+```{r echo=TRUE}
+ahist<-aggregate(active2$steps,by=list(active2$date),FUN=sum)
+colnames(ahist)<-c("interval","sum") ## Give the columns meaningful names
+plot(ahist$interval,ahist$sum,type="h",xlab="Date",ylab="Total Steps",main="Total Steps per Day",lwd=10,lend="square",col="blue")
+```
 
+What is the daily mean?
+```{r echo=TRUE}
+mean(ahist$sum)
+```
 
-
+What is the daily median?
+```{r echo=TRUE}
+median(ahist$sum)
+```
 ## What is the average daily activity pattern?
+Aggregate and plot the mean number of step taken per interval averaged over all days.
+```{r echo=TRUE}
+ahist2<-aggregate(active2$steps,by=list(active2$interval),FUN=mean)
+colnames(ahist2)<-c("interval","mean") ## Give the columns meaningful names
+plot(ahist2$interval,ahist2$mean,type="l",xlab="Interval",ylab="Mean Steps",main="Mean Steps per Interval", col="blue")
+```
 
-
+Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+```{r echo=TRUE}
+active2[which.max(active2$steps),]
+```
 
 ## Imputing missing values
+Calculate the number of missing step measures
+```{r echo=TRUE}
+sum(is.na(active$steps))
+```
 
+For fun, make sure there are no missing interval labels or dates
+```{r echo=TRUE}
+sum(is.na(active$interval))
+sum(is.na(active$date))
+```
 
+This report will use the mean of each interval to inpute missing steps values.
+First merge the original dataset with an aggregrate of the mean steps by interval (ahist2) to line up (that is index) steps with mean steps by interval. Get a vector of indices where steps == NA. then use those indices to update steps to the mean for the interval only for NAs.
+```{r echo=TRUE}
+mrg<-merge(active,ahist2) ## merge active with ahist2 to line up steps (active$steps) with mean steps by interval (ahist2$mean)
+nandx<-which(is.na(mrg$steps)) ## Get a vector of indices for the NA rows
+mrg[nandx,2]<-mrg[nandx,4] ## replace steps with mean steps by interval where steps == NA
+```
+
+Aggregate and plot a histogram of the total number of steps taken per day with the data inputed for NAs.
+```{r echo=TRUE}
+ahist3<-aggregate(mrg$steps,by=list(mrg$date),FUN=sum)
+colnames(ahist3)<-c("interval","sum") ## Give the columns meaningful names
+plot(ahist3$interval,ahist3$sum,type="h",xlab="Date",ylab="Total Steps",main="Total Steps per Day (with inputed data)",lwd=10,lend="square",col="blue")
+```
+
+What is the daily mean of the new dataset?
+```{r echo=TRUE}
+mean(ahist3$sum)
+```
+
+What is the daily median of the new dataset?
+```{r echo=TRUE}
+median(ahist3$sum)
+```
+The mean is the same, which makes sense because we added in means.
+The median changed slightly. 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+Using data without NAs to minimize the possibility of errors, create a panel plot with "weekend" and "weekday" panels, plotting mean number of steps vs. the interval.
+```{r echo=TRUE}
+active2$day<-weekdays(active2$date) ## add a weekdays field to the data calculated from active$date
+active2$endVday<-"weekday" ## default to the day being a weekday
+active2[active2$day %in% c("Saturday","Sunday"),5]<-"weekend" ## Update Saturdays and sundays to be weekdays
+active2$endVday<-as.factor(active2$endVday) ## Coerce weekend vs weekday to be a factor
+whist<-aggregate(active2$steps,by=list(active2$interval,active2$endVday),FUN=mean) ## Find the mean steps by interval and weekend
+colnames(whist)<-c("interval","endVday","mean") ## create meaningful colum names
+xyplot(whist$mean~whist$interval|whist$endVday,type="l",xlab="Interval",ylab="Number of steps",layout=c(1,2))
+```
