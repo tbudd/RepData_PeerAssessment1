@@ -25,7 +25,7 @@ Aggregate and plot a histogram of the total number of steps taken per day.
 ```r
 ahist<-aggregate(active2$steps,by=list(active2$date),FUN=sum)
 colnames(ahist)<-c("interval","sum") ## Give the columns meaningful names
-plot(ahist$interval,ahist$sum,type="h",xlab="Date",ylab="Total Steps",main="Total Steps per Day",lwd=10,lend="square",col="blue")
+hist(ahist$sum,xlab="Steps per Day",main="Histogram of Steps per Day",col="blue",breaks=20)
 ```
 
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
@@ -114,7 +114,7 @@ Aggregate and plot a histogram of the total number of steps taken per day with t
 ```r
 ahist3<-aggregate(mrg$steps,by=list(mrg$date),FUN=sum)
 colnames(ahist3)<-c("interval","sum") ## Give the columns meaningful names
-plot(ahist3$interval,ahist3$sum,type="h",xlab="Date",ylab="Total Steps",main="Total Steps per Day (with inputed data)",lwd=10,lend="square",col="blue")
+hist(ahist3$sum,xlab="Steps per Day",main="Histogram of Steps per Day",col="blue",breaks=20)
 ```
 
 ![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
@@ -139,7 +139,29 @@ median(ahist3$sum)
 ## [1] 10766.19
 ```
 The mean is the same, which makes sense because we added in means.
-The median changed slightly. 
+The median changed slightly.
+
+
+
+For fun, calculate the standard deviation for the original (ahist) and dataset with imputed values (ahist3).
+
+```r
+sd(ahist$sum)
+```
+
+```
+## [1] 4269.18
+```
+
+```r
+sd(ahist3$sum)
+```
+
+```
+## [1] 3974.391
+```
+From the histogram and the standard deviation, we can see the data with imputed values are clustered closer to the mean, which is why imputed dataset picked up the mean as the median.
+
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -155,4 +177,4 @@ colnames(whist)<-c("interval","endVday","mean") ## create meaningful colum names
 xyplot(whist$mean~whist$interval|whist$endVday,type="l",xlab="Interval",ylab="Number of steps",layout=c(1,2))
 ```
 
-![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png) 
+![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14-1.png) 

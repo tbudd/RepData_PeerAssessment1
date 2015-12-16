@@ -23,7 +23,7 @@ Aggregate and plot a histogram of the total number of steps taken per day.
 ```{r echo=TRUE}
 ahist<-aggregate(active2$steps,by=list(active2$date),FUN=sum)
 colnames(ahist)<-c("interval","sum") ## Give the columns meaningful names
-plot(ahist$interval,ahist$sum,type="h",xlab="Date",ylab="Total Steps",main="Total Steps per Day",lwd=10,lend="square",col="blue")
+hist(ahist$sum,xlab="Steps per Day",main="Histogram of Steps per Day",col="blue",breaks=20)
 ```
 
 What is the daily mean?
@@ -72,7 +72,7 @@ Aggregate and plot a histogram of the total number of steps taken per day with t
 ```{r echo=TRUE}
 ahist3<-aggregate(mrg$steps,by=list(mrg$date),FUN=sum)
 colnames(ahist3)<-c("interval","sum") ## Give the columns meaningful names
-plot(ahist3$interval,ahist3$sum,type="h",xlab="Date",ylab="Total Steps",main="Total Steps per Day (with inputed data)",lwd=10,lend="square",col="blue")
+hist(ahist3$sum,xlab="Steps per Day",main="Histogram of Steps per Day",col="blue",breaks=20)
 ```
 
 What is the daily mean of the new dataset?
@@ -85,7 +85,17 @@ What is the daily median of the new dataset?
 median(ahist3$sum)
 ```
 The mean is the same, which makes sense because we added in means.
-The median changed slightly. 
+The median changed slightly.
+
+
+
+For fun, calculate the standard deviation for the original (ahist) and dataset with imputed values (ahist3).
+```{r echo=TRUE}
+sd(ahist$sum)
+sd(ahist3$sum)
+```
+From the histogram and the standard deviation, we can see the data with imputed values are clustered closer to the mean, which is why imputed dataset picked up the mean as the median.
+
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
