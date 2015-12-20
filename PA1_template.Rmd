@@ -60,7 +60,7 @@ sum(is.na(active$interval))
 sum(is.na(active$date))
 ```
 
-This report will use the mean of each interval to inpute missing steps values.
+This report will use the mean of each interval to impute missing steps values.
 First merge the original dataset with an aggregrate of the mean steps by interval (ahist2) to line up (that is index) steps with mean steps by interval. Get a vector of indices where steps == NA. then use those indices to update steps to the mean for the interval only for NAs.
 ```{r echo=TRUE}
 mrg<-merge(active,ahist2) ## merge active with ahist2 to line up steps (active$steps) with mean steps by interval (ahist2$mean)
@@ -68,7 +68,7 @@ nandx<-which(is.na(mrg$steps)) ## Get a vector of indices for the NA rows
 mrg[nandx,2]<-mrg[nandx,4] ## replace steps with mean steps by interval where steps == NA
 ```
 
-Aggregate and plot a histogram of the total number of steps taken per day with the data inputed for NAs.
+Aggregate and plot a histogram of the total number of steps taken per day with the data imputed for NAs.
 ```{r echo=TRUE}
 ahist3<-aggregate(mrg$steps,by=list(mrg$date),FUN=sum)
 colnames(ahist3)<-c("interval","sum") ## Give the columns meaningful names

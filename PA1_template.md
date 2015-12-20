@@ -1,9 +1,4 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
@@ -28,7 +23,7 @@ colnames(ahist)<-c("interval","sum") ## Give the columns meaningful names
 hist(ahist$sum,xlab="Steps per Day",main="Histogram of Steps per Day",col="blue",breaks=20)
 ```
 
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
 
 What is the daily mean?
 
@@ -58,7 +53,7 @@ colnames(ahist2)<-c("interval","mean") ## Give the columns meaningful names
 plot(ahist2$interval,ahist2$mean,type="l",xlab="Interval",ylab="Mean Steps",main="Mean Steps per Interval", col="blue")
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
 Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -100,7 +95,7 @@ sum(is.na(active$date))
 ## [1] 0
 ```
 
-This report will use the mean of each interval to inpute missing steps values.
+This report will use the mean of each interval to impute missing steps values.
 First merge the original dataset with an aggregrate of the mean steps by interval (ahist2) to line up (that is index) steps with mean steps by interval. Get a vector of indices where steps == NA. then use those indices to update steps to the mean for the interval only for NAs.
 
 ```r
@@ -109,7 +104,7 @@ nandx<-which(is.na(mrg$steps)) ## Get a vector of indices for the NA rows
 mrg[nandx,2]<-mrg[nandx,4] ## replace steps with mean steps by interval where steps == NA
 ```
 
-Aggregate and plot a histogram of the total number of steps taken per day with the data inputed for NAs.
+Aggregate and plot a histogram of the total number of steps taken per day with the data imputed for NAs.
 
 ```r
 ahist3<-aggregate(mrg$steps,by=list(mrg$date),FUN=sum)
@@ -117,7 +112,7 @@ colnames(ahist3)<-c("interval","sum") ## Give the columns meaningful names
 hist(ahist3$sum,xlab="Steps per Day",main="Histogram of Steps per Day",col="blue",breaks=20)
 ```
 
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
 
 What is the daily mean of the new dataset?
 
@@ -177,4 +172,4 @@ colnames(whist)<-c("interval","endVday","mean") ## create meaningful colum names
 xyplot(whist$mean~whist$interval|whist$endVday,type="l",xlab="Interval",ylab="Number of steps",layout=c(1,2))
 ```
 
-![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-14-1.png) 
