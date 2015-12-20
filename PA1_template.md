@@ -1,4 +1,9 @@
-# Reproducible Research: Peer Assessment 1
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+---
 
 
 ## Loading and preprocessing the data
@@ -23,7 +28,7 @@ colnames(ahist)<-c("interval","sum") ## Give the columns meaningful names
 hist(ahist$sum,xlab="Steps per Day",main="Histogram of Steps per Day",col="blue",breaks=20)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
 What is the daily mean?
 
@@ -53,7 +58,7 @@ colnames(ahist2)<-c("interval","mean") ## Give the columns meaningful names
 plot(ahist2$interval,ahist2$mean,type="l",xlab="Interval",ylab="Mean Steps",main="Mean Steps per Interval", col="blue")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
 
 Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -112,7 +117,7 @@ colnames(ahist3)<-c("interval","sum") ## Give the columns meaningful names
 hist(ahist3$sum,xlab="Steps per Day",main="Histogram of Steps per Day",col="blue",breaks=20)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
 
 What is the daily mean of the new dataset?
 
@@ -172,4 +177,4 @@ colnames(whist)<-c("interval","endVday","mean") ## create meaningful colum names
 xyplot(whist$mean~whist$interval|whist$endVday,type="l",xlab="Interval",ylab="Number of steps",layout=c(1,2))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-14-1.png) 
+![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14-1.png) 
