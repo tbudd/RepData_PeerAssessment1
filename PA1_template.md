@@ -140,9 +140,7 @@ median(ahist3$sum)
 ```
 The mean is the same, which makes sense because we added in means.
 The median changed slightly.
-
-
-
+   
 For fun, calculate the standard deviation for the original (ahist) and dataset with imputed values (ahist3).
 
 ```r
@@ -165,14 +163,14 @@ From the histogram and the standard deviation, we can see the data with imputed 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-Using data without NAs to minimize the possibility of errors, create a panel plot with "weekend" and "weekday" panels, plotting mean number of steps vs. the interval.
+Using imputed data, create a panel plot with "weekend" and "weekday" panels, plotting mean number of steps vs. the interval.
 
 ```r
-active2$day<-weekdays(active2$date) ## add a weekdays field to the data calculated from active$date
-active2$endVday<-"weekday" ## default to the day being a weekday
-active2[active2$day %in% c("Saturday","Sunday"),5]<-"weekend" ## Update Saturdays and sundays to be weekdays
-active2$endVday<-as.factor(active2$endVday) ## Coerce weekend vs weekday to be a factor
-whist<-aggregate(active2$steps,by=list(active2$interval,active2$endVday),FUN=mean) ## Find the mean steps by interval and weekend
+mrg$day<-weekdays(mrg$date) ## add a weekdays field to the data calculated from active$date
+mrg$endVday<-"weekday" ## default to the day being a weekday
+mrg[mrg$day %in% c("Saturday","Sunday"),6]<-"weekend" ## Update Saturdays and sundays to be weekdays
+mrg$endVday<-as.factor(mrg$endVday) ## Coerce weekend vs weekday to be a factor
+whist<-aggregate(mrg$steps,by=list(mrg$interval,mrg$endVday),FUN=mean) ## Find the mean steps by interval and weekend
 colnames(whist)<-c("interval","endVday","mean") ## create meaningful colum names
 xyplot(whist$mean~whist$interval|whist$endVday,type="l",xlab="Interval",ylab="Number of steps",layout=c(1,2))
 ```
